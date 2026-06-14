@@ -178,9 +178,8 @@ export default function MatchResultPage() {
 
     const targetRoles = ["기획자", "프론트엔드 개발", "백엔드 개발", "디자이너"];
     
-    // 각 역할군별 최고 인재를 상위 5명씩 선발하여 역할 쏠림 방지
-    const selectedCandidateIds = new Set();
-    let candidates = [];
+    const selectedCandidateIds = new Set<string>();
+    const candidates: any[] = [];
     
     targetRoles.forEach(role => {
       const sortedForRole = [...validCandidates].sort((a, b) => getScore(b, role) - getScore(a, role));

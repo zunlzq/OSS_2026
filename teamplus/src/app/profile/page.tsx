@@ -18,7 +18,6 @@ export default function ProfilePage() {
   const hours = Array.from({length: 12}, (_, i) => i + 9);
   const [schedule, setSchedule] = useState<Set<string>>(new Set());
 
-  // Preview role based on skills and preferences
   const { previewRole, hasTie } = useMemo(() => {
     const skillScores: Record<string, number> = { "상": 3, "중": 2, "하": 1 };
     const roleMapping: Record<string, string> = { "프론트엔드": "프론트엔드 개발", "백엔드": "백엔드 개발", "기획": "기획자", "UI/UX": "디자이너" };
@@ -53,7 +52,6 @@ export default function ProfilePage() {
     return { previewRole: roleMapping[finalSkill], hasTie: isTie };
   }, [selectedSkills, selectedRole]);
 
-  // Auto-sync selectedRole to follow skill-based calculation when there is a clear winner (no tie)
   useEffect(() => {
     const skillScores: Record<string, number> = { "상": 3, "중": 2, "하": 1 };
     const roleMapping: Record<string, string> = { "프론트엔드": "프론트엔드 개발", "백엔드": "백엔드 개발", "기획": "기획자", "UI/UX": "디자이너" };
@@ -73,7 +71,6 @@ export default function ProfilePage() {
       }
     }
 
-    // Only auto-update when there is a single clear winner (no tie)
     if (bestSkills.length === 1) {
       const autoRole = roleMapping[bestSkills[0]];
       setSelectedRole(autoRole);
@@ -92,7 +89,6 @@ export default function ProfilePage() {
       setUserEmail(user.email || "");
       setUserName(user.user_metadata?.name || "");
 
-      // Fetch profile
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("*")
@@ -143,7 +139,6 @@ export default function ProfilePage() {
       return;
     }
     
-    // Calculate role based on skills and preferences
     const skillScores: Record<string, number> = { "상": 3, "중": 2, "하": 1 };
     const roleMapping: Record<string, string> = { "프론트엔드": "프론트엔드 개발", "백엔드": "백엔드 개발", "기획": "기획자", "UI/UX": "디자이너" };
     const reverseRoleMapping: Record<string, string> = { "프론트엔드 개발": "프론트엔드", "백엔드 개발": "백엔드", "기획자": "기획", "디자이너": "UI/UX" };
@@ -213,7 +208,6 @@ export default function ProfilePage() {
     if (error) {
       alert("프로필 저장 실패: " + error.message);
     } else {
-      // Delete ALL team_members for this user (by user_id) to prevent orphaned records
       const { data: memberRecords } = await supabase
         .from("team_members")
         .select("team_id")

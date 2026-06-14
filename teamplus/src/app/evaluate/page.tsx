@@ -33,7 +33,6 @@ export default function EvaluatePage() {
       }
       setCurrentUser(user);
 
-      // Get user's active team_id
       const { data: memberRecords, error: memberErr } = await supabase
         .from("team_members")
         .select("team_id")
@@ -48,7 +47,6 @@ export default function EvaluatePage() {
       const tId = memberRecords[0].team_id;
       setTeamId(tId);
 
-      // Fetch other team members
       const { data: allMembers, error: allErr } = await supabase
         .from("team_members")
         .select(`

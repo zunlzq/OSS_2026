@@ -57,7 +57,6 @@ export default function WorkspacePage() {
       }
       setUserId(user.id);
 
-      // Check user's team
       const { data: memberRecords, error: memberErr } = await supabase
         .from("team_members")
         .select("team_id")
@@ -72,7 +71,6 @@ export default function WorkspacePage() {
       const tId = memberRecords[0].team_id;
       setTeamId(tId);
 
-      // Fetch team detail
       const { data: teamDetail } = await supabase
         .from("teams")
         .select("project_info")
@@ -82,7 +80,6 @@ export default function WorkspacePage() {
         setTeamName(teamDetail.project_info);
       }
 
-      // Fetch all team members
       const { data: allMembers, error: allErr } = await supabase
         .from("team_members")
         .select(`
@@ -104,7 +101,6 @@ export default function WorkspacePage() {
 
       setTeamMembers(allMembers);
 
-      // Populate memberMap
       const newMemberMap: Record<string, MemberMapInfo> = {};
       allMembers.forEach((m: any) => {
         const profile = m.profiles;
@@ -116,7 +112,6 @@ export default function WorkspacePage() {
       });
       setMemberMap(newMemberMap);
 
-      // Calculate common availability (Intersection of all member schedule arrays)
       const memberSchedules = allMembers.map((m: any) => m.profiles?.available_time || []);
       let intersection: string[] = [];
       if (memberSchedules.length > 0) {
@@ -162,7 +157,6 @@ export default function WorkspacePage() {
         setCommonTimeSub("팀원 100%가 참석 가능합니다.");
       }
 
-      // Fetch chat messages
       await fetchMessages(tId);
       setLoading(false);
     }
@@ -170,7 +164,6 @@ export default function WorkspacePage() {
     loadWorkspaceData();
   }, [router]);
 
-  // Real-time chat subscriptions
   useEffect(() => {
     if (!teamId) return;
 
